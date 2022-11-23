@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "sinbaram-clone"
+version = "0.1.0"
+description = ""
+authors = ["Giheon <74302278+Dockerel@users.noreply.github.com>"]
+license = "MIT"
+readme = "README.md"
+packages = [{include = "sinbaram_clone"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "^4.1.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
