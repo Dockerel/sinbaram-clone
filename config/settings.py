@@ -34,6 +34,8 @@ CUSTOM_APPS = [
     "common.apps.CommonConfig",
     "users.apps.UsersConfig",
     "fabrics.apps.FabricsConfig",
+    "medias.apps.MediasConfig",
+    "reviews.apps.ReviewsConfig",
 ]
 
 SYSTEM_APPS = [

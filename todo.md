@@ -1,4 +1,4 @@
-medias - [ ]
+medias - [x]
 
 reviews - [ ]
 
