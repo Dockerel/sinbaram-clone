@@ -4,6 +4,7 @@ from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
 from rest_framework.exceptions import NotFound
 from .models import Fabric
 from .serializer import FabricSerializer, FabricDetailSerializer
+from reviews.serializer import ReviewSerializer
 
 
 class Fabrics(APIView):
@@ -61,3 +62,29 @@ class FabricDetail(APIView):
         fabric = self.get_object(pk)
         fabric.delete()
         return Response(status=HTTP_204_NO_CONTENT)
+
+
+class FabricReviews(APIView):
+    def get_object(self, pk):
+        try:
+            return Fabric.objects.get(pk=pk)
+        except Fabric.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        fabric = self.get_object(pk)
+        review = fabric.reviews.all()
+        serializer = ReviewSerializer(
+            review,
+            many=True,
+        )
+        return Response(serializer.data)
+
+    def post(self, request, pk):
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid():
+            review = serializer.save(user=request.user, fabric=self.get_object(pk))
+            serializer = ReviewSerializer(review)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
