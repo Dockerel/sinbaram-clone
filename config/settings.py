@@ -37,6 +37,7 @@ CUSTOM_APPS = [
     "medias.apps.MediasConfig",
     "reviews.apps.ReviewsConfig",
     "wishlists.apps.WishlistsConfig",
+    "qnas.apps.QnasConfig",
 ]
 
 SYSTEM_APPS = [
