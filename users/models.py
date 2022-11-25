@@ -10,20 +10,12 @@ class User(AbstractUser):
         MALE = ("male", "Male")
         FEMALE = ("female", "Female")
 
-    first_name = models.CharField(
-        max_length=150,
-        editable=False,
-    )
-    last_name = models.CharField(
-        max_length=150,
-        editable=False,
-    )
     avatar = models.URLField(
         blank=True,
+        null=True,
     )
     name = models.CharField(
         max_length=150,
-        default="",
     )
     phone = models.CharField(
         max_length=11,
