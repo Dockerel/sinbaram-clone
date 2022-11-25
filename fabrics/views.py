@@ -2,12 +2,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
 from rest_framework.exceptions import NotFound
+from rest_framework.permissions import IsAdminOrReadOnly, IsAuthenticatedOrReadOnly
 from .models import Fabric
 from .serializer import FabricSerializer, FabricDetailSerializer
 from reviews.serializer import ReviewSerializer
 
 
 class Fabrics(APIView):
+
+    permission_classes = [IsAdminOrReadOnly]
+
     def get(self, request):
         all_fabrics = Fabric.objects.all()
         serializer = FabricSerializer(
@@ -30,6 +34,9 @@ class Fabrics(APIView):
 
 
 class FabricDetail(APIView):
+
+    permission_classes = [IsAdminOrReadOnly]
+
     def get_object(self, pk):
         try:
             return Fabric.objects.get(pk=pk)
@@ -65,6 +72,9 @@ class FabricDetail(APIView):
 
 
 class FabricReviews(APIView):
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get_object(self, pk):
         try:
             return Fabric.objects.get(pk=pk)
