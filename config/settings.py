@@ -36,6 +36,7 @@ CUSTOM_APPS = [
     "fabrics.apps.FabricsConfig",
     "medias.apps.MediasConfig",
     "reviews.apps.ReviewsConfig",
+    "wishlists.apps.WishlistsConfig",
 ]
 
 SYSTEM_APPS = [

@@ -1,8 +1,8 @@
 medias - [x]
 
-reviews - [ ]
+reviews - [x]
 
-wishlists - [ ]
+wishlists - [x]
 
 users - [x]
 
