@@ -4,9 +4,16 @@ from common.models import CommonModel
 
 class Qna(CommonModel):
 
-    """Q&A Model Definition"""
+    """Qna Model Definition"""
 
-    question = models.TextField(
+    fabric = models.ForeignKey(
+        "fabrics.Fabric",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="qnas",
+    )
+    question = models.CharField(
         max_length=1000,
     )
     user = models.ForeignKey(
@@ -14,10 +21,10 @@ class Qna(CommonModel):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        related_name="qnas",
     )
-
-    answer = models.TextField(
+    answer = models.CharField(
         max_length=1000,
-        null=True,
         blank=True,
+        null=True,
     )

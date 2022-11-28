@@ -5,8 +5,7 @@ from .models import Qna
 @admin.register(Qna)
 class QnaAdmin(admin.ModelAdmin):
     list_display = (
+        "question",
         "user",
-        "pk",
-        "created_at",
-        "updated_at",
+        "answer",
     )
