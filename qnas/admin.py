@@ -6,6 +6,7 @@ from .models import Qna
 class QnaAdmin(admin.ModelAdmin):
     list_display = (
         "question",
+        "pk",
         "user",
-        "answer",
+        "replied",
     )

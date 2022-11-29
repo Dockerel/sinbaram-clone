@@ -41,6 +41,7 @@ CUSTOM_APPS = [
     "reviews.apps.ReviewsConfig",
     "wishlists.apps.WishlistsConfig",
     "qnas.apps.QnasConfig",
+    "answers.apps.AnswersConfig",
 ]
 
 SYSTEM_APPS = [

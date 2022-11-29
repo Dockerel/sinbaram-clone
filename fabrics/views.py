@@ -1,12 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT, HTTP_409_CONFLICT
 from rest_framework.exceptions import NotFound
 from rest_framework.permissions import IsAdminOrReadOnly, IsAuthenticatedOrReadOnly, IsAuthenticated
 from .models import Fabric
 from .serializer import FabricSerializer, FabricDetailSerializer
 from reviews.serializer import ReviewSerializer
-from qnas.serializer import QnaSerializer, NewQnaSerializer
+from qnas.serializer import QnaSerializer, NewQnaSerializer, QnaDetailSerializer
+from answers.serializer import AnswerSerializer
 
 
 class Fabrics(APIView):
@@ -132,4 +133,81 @@ class NewFabricQuestions(APIView):
             serializer = NewQnaSerializer(new_qna)
             return Response(serializer.data)
         else:
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+
+class FabricQuestionsDetail(APIView):
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            return Fabric.objects.get(pk=pk)
+        except Fabric.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, fabric_pk, pk):
+        fabric = self.get_object(fabric_pk)
+        question = fabric.qnas.filter(pk=pk)[0]
+        serializer = QnaDetailSerializer(question)
+        return Response(serializer.data)
+
+    def put(self, request, fabric_pk, pk):
+        fabric = self.get_object(fabric_pk)
+        question = fabric.qnas.filter(pk=pk)[0]
+        serializer = QnaDetailSerializer(
+            question,
+            data=request.data,
+            partial=True,
+        )
+        if serializer.is_valid():
+            updated_qna = serializer.save()
+            serializer = QnaDetailSerializer(updated_qna)
+            return Response(serializer.data)
+        else:
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
+
+
+class FabricQuestionsAnswer(APIView):
+
+    permission_classes = [IsAdminOrReadOnly]
+
+    def get_object(self, pk):
+        try:
+            return Fabric.objects.get(pk=pk)
+        except Fabric.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, fabric_pk, pk):
+        fabric = self.get_object(fabric_pk)
+        question = fabric.qnas.filter(pk=pk)[0]
+        try:
+            answer = question.answers
+        except:
+            serializer = QnaSerializer(question)
+            return Response(serializer.data)
+        serializer = AnswerSerializer(answer)
+        return Response(serializer.data)
+
+    def post(self, request, fabric_pk, pk):
+        fabric = self.get_object(fabric_pk)
+        question = fabric.qnas.filter(pk=pk)[0]
+
+        serializer = AnswerSerializer(data=request.data)
+        if serializer.is_valid():
+            answer = serializer.save(
+                question=question,
+            )
+            serializer = AnswerSerializer(answer)
+            return Response(serializer.data)
+        else:
+            return Response(
+                serializer.errors,
+                status=HTTP_400_BAD_REQUEST,
+            )
