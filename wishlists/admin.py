@@ -6,6 +6,7 @@ from .models import Wishlist
 class WishlistAdmin(admin.ModelAdmin):
     list_display = (
         "name",
+        "pk",
         "user",
         "created_at",
         "updated_at",
