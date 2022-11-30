@@ -5,6 +5,7 @@ from rest_framework.exceptions import NotFound
 from rest_framework import status
 from .models import Wishlist
 from .serializer import WishlistSerializer
+from fabrics.models import Fabric
 
 
 class Wishlists(APIView):
@@ -70,3 +71,28 @@ class WishlistDetail(APIView):
         wishlist = self.get_object(pk)
         wishlist.delete()
         return Response(status=status.HTTP_200_OK)
+
+
+class WishlistToggle(APIView):
+    def get_object(self, pk, user):
+        try:
+            return Wishlist.objects.get(pk=pk, user=user)
+        except Wishlist.DoesNotExist:
+            raise NotFound
+
+    def get_fabric(self, pk):
+        try:
+            return Fabric.objects.get(pk=pk)
+        except Fabric.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, wishlist_pk, pk):
+        wishlist = self.get_object(wishlist_pk, request.user)
+        fabric = self.get_fabric(pk)
+        if wishlist.fabrics.filter(pk=fabric.pk).exists():
+            wishlist.fabrics.remove(fabric)
+            content = "Successfully Deleted"
+        else:
+            wishlist.fabrics.add(fabric)
+            content = "Successfully Added"
+        return Response({"ok": f"{content}"}, status=status.HTTP_200_OK)
