@@ -23,9 +23,6 @@ class Qna(CommonModel):
         on_delete=models.SET_NULL,
         related_name="qnas",
     )
-    replied = models.BooleanField(
-        default=False,
-    )
 
     def __str__(self):
         return f"[{str(self.pk)}] - " + self.question[:15] + "..."

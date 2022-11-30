@@ -186,7 +186,10 @@ class FabricQuestionsAnswer(APIView):
 
     def get(self, request, fabric_pk, pk):
         fabric = self.get_object(fabric_pk)
-        question = fabric.qnas.filter(pk=pk)[0]
+        try:
+            question = fabric.qnas.filter(pk=pk)[0]
+        except:
+            raise NotFound
         try:
             answer = question.answers
         except:
@@ -197,7 +200,10 @@ class FabricQuestionsAnswer(APIView):
 
     def post(self, request, fabric_pk, pk):
         fabric = self.get_object(fabric_pk)
-        question = fabric.qnas.filter(pk=pk)[0]
+        try:
+            question = fabric.qnas.filter(pk=pk)[0]
+        except:
+            raise NotFound
 
         serializer = AnswerSerializer(data=request.data)
         if serializer.is_valid():

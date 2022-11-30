@@ -8,5 +8,4 @@ class QnaAdmin(admin.ModelAdmin):
         "question",
         "pk",
         "user",
-        "replied",
     )
